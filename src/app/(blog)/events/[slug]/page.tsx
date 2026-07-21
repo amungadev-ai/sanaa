@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // Revalidate every 60 seconds for ISR
 export const revalidate = 60;
 

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import { PostDetailClient } from './post-detail-client';
