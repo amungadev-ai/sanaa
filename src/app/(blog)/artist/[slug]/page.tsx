@@ -1,6 +1,4 @@
 export const dynamic = "force-dynamic";
-// Revalidate every 60 seconds for ISR
-export const revalidate = 60;
 
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
@@ -40,12 +38,6 @@ export async function generateMetadata({ params }: ArtistProfilePageProps) {
       images: artist.image ? [artist.image] : undefined,
     },
   };
-}
-
-},
-    select: { slug: true },
-  });
-  return artists.map((a) => ({ slug: a.slug }));
 }
 
 export default async function ArtistProfilePage({ params }: ArtistProfilePageProps) {

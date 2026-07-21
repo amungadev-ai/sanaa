@@ -3,8 +3,6 @@ import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import { PostDetailClient } from './post-detail-client';
 
-// Revalidate every 60 seconds so new images/edits show up without a full redeploy
-export const revalidate = 60;
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -27,7 +25,6 @@ export async function generateMetadata({ params }: PostPageProps) {
     description,
     alternates: {
       canonical: `/post/${slug}`,
-    },
     openGraph: {
       title,
       description,
@@ -35,20 +32,12 @@ export async function generateMetadata({ params }: PostPageProps) {
       type: 'article',
       publishedTime: post.publishedAt?.toISOString(),
       modifiedTime: post.updatedAt?.toISOString(),
-    },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
       images: post.ogImage ? [post.ogImage] : undefined,
-    },
   };
-}
-
-},
-    select: { slug: true },
-  });
-  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export default async function PostPage({ params }: PostPageProps) {
@@ -76,15 +65,11 @@ export default async function PostPage({ params }: PostPageProps) {
       authorId: true,
       author: {
         select: { id: true, name: true, username: true, image: true, bio: true },
-      },
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
-      },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
-      },
       _count: { select: { comments: true, bookmarks: true } },
-    },
   });
 
   if (!post || post.status !== 'PUBLISHED') {
@@ -103,15 +88,12 @@ export default async function PostPage({ params }: PostPageProps) {
         { categories: { some: { categoryId: { in: categoryIds } } } },
         { tags: { some: { tagId: { in: tagIds } } } },
       ],
-    },
     include: {
       author: { select: { id: true, name: true, username: true, image: true } },
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
-      },
       tags: { include: { tag: { select: { id: true, name: true, slug: true } } } },
       _count: { select: { comments: true, bookmarks: true } },
-    },
     take: 50, // Larger candidate pool for better diversity selection
   });
 
@@ -163,15 +145,12 @@ export default async function PostPage({ params }: PostPageProps) {
       status: 'PUBLISHED',
       id: { not: post.id },
       authorId: post.authorId,
-    },
     include: {
       author: { select: { id: true, name: true, username: true, image: true } },
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
-      },
       tags: { include: { tag: { select: { id: true, name: true, slug: true } } } },
       _count: { select: { comments: true, bookmarks: true } },
-    },
     take: 3,
     orderBy: { publishedAt: 'desc' },
   });
@@ -189,11 +168,9 @@ export default async function PostPage({ params }: PostPageProps) {
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://sanaathrumylens.co.ke/post/${post.slug}`,
-    },
     author: {
       '@type': 'Person',
       name: post.author.name,
-    },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     publisher: {
@@ -203,8 +180,6 @@ export default async function PostPage({ params }: PostPageProps) {
       logo: {
         '@type': 'ImageObject',
         url: 'https://sanaathrumylens.co.ke/logo.svg',
-      },
-    },
   };
 
   const breadcrumbLd = {

@@ -1,6 +1,4 @@
 export const dynamic = "force-dynamic";
-// Revalidate every 60 seconds for ISR
-export const revalidate = 60;
 
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
@@ -24,26 +22,20 @@ export async function generateMetadata({ params }: EventDetailPageProps) {
     description: event.excerpt || undefined,
     alternates: {
       canonical: `/events/${slug}`,
-    },
     openGraph: {
       title: event.title,
       description: event.excerpt || undefined,
       images: event.coverImage ? [event.coverImage] : undefined,
       type: 'article',
-    },
     twitter: {
       card: 'summary_large_image',
       title: event.title,
       description: event.excerpt || undefined,
       images: event.coverImage ? [event.coverImage] : undefined,
-    },
   };
 }
 
-},
-    select: { slug: true },
   });
-  return events.map((e) => ({ slug: e.slug }));
 }
 
 export default async function EventDetailPage({ params }: EventDetailPageProps) {
@@ -54,8 +46,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     include: {
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
-      },
-    },
   });
 
   if (!event || !event.isActive) {
@@ -69,12 +59,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       isActive: true,
       id: { not: event.id },
       categories: { some: { categoryId: { in: categoryIds } } },
-    },
     include: {
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
-      },
-    },
     orderBy: { startDate: 'asc' },
     take: 3,
   });
@@ -94,8 +81,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
         '@type': 'PostalAddress',
         addressLocality: event.city || undefined,
         addressCountry: event.country || undefined,
-      },
-    },
     isAccessibleForFree: event.isFree,
     offers: event.price ? {
       '@type': 'Offer',
@@ -104,7 +89,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     organizer: {
       '@type': 'Organization',
       name: 'Sanaa Through My Lens',
-    },
   };
 
   return (
