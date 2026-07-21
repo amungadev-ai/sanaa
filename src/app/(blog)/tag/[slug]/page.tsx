@@ -40,8 +40,6 @@ export async function generateMetadata({ params }: TagPageProps) {
   };
 }
 
-export async function generateStaticParams() {
-  return [];
 },
   });
   return tags.map((t) => ({ slug: t.slug }));

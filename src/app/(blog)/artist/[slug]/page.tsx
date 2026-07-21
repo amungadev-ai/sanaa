@@ -42,8 +42,6 @@ export async function generateMetadata({ params }: ArtistProfilePageProps) {
   };
 }
 
-export async function generateStaticParams() {
-  return [];
 },
     select: { slug: true },
   });

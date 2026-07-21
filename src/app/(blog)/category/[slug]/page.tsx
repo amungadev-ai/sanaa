@@ -40,8 +40,6 @@ export async function generateMetadata({ params }: CategoryPageProps) {
   };
 }
 
-export async function generateStaticParams() {
-  return [];
 },
     select: { slug: true },
   });

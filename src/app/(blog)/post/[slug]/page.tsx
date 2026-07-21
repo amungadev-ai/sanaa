@@ -45,8 +45,6 @@ export async function generateMetadata({ params }: PostPageProps) {
   };
 }
 
-export async function generateStaticParams() {
-  return [];
 },
     select: { slug: true },
   });
