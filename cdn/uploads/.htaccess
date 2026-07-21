@@ -1,0 +1,29 @@
+# Deny direct PHP execution in uploads directory (Apache 2.2 + 2.4 compatible)
+<FilesMatch "\.ph(p[2-7]?|t|tml)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# No script execution — use SetHandler instead of php_flag (works with FastCGI/suPHP)
+<FilesMatch "\.ph(p[2-7]?|t|tml)$">
+    SetHandler none
+</FilesMatch>
+
+# Allow all image types (Apache 2.2 + 2.4 compatible)
+<FilesMatch "\.(?i)(jpg|jpeg|png|gif|webp|avif|svg)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+</FilesMatch>
