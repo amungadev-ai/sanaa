@@ -25,17 +25,17 @@ export async function generateMetadata({ params }: TagPageProps) {
     description,
     alternates: {
       canonical: `/tag/${slug}`,
+    },
     openGraph: {
       title,
       description,
+    },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+    },
   };
-}
-
-  });
 }
 
 export default async function TagPage({ params }: TagPageProps) {
@@ -54,12 +54,15 @@ export default async function TagPage({ params }: TagPageProps) {
     where: {
       status: 'PUBLISHED',
       tags: { some: { tagId: tag.id } },
+    },
     include: {
       author: { select: { id: true, name: true, username: true, image: true } },
       categories: {
         include: { category: { select: { id: true, name: true, slug: true, color: true } } },
+      },
       tags: { include: { tag: { select: { id: true, name: true, slug: true } } } },
       _count: { select: { comments: true, bookmarks: true } },
+    },
     orderBy: { publishedAt: 'desc' },
     take: 20,
   });
