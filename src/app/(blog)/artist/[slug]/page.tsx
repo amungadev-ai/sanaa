@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: ArtistProfilePageProps) {
 }
 
 export async function generateStaticParams() {
-  const artists = await db.artist.findMany({
-    where: { isActive: true },
+  return [];
+},
     select: { slug: true },
   });
   return artists.map((a) => ({ slug: a.slug }));

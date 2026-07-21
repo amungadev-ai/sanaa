@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: EventDetailPageProps) {
 }
 
 export async function generateStaticParams() {
-  const events = await db.event.findMany({
-    where: { isActive: true },
+  return [];
+},
     select: { slug: true },
   });
   return events.map((e) => ({ slug: e.slug }));

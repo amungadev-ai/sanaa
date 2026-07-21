@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: PostPageProps) {
 }
 
 export async function generateStaticParams() {
-  const posts = await db.post.findMany({
-    where: { status: 'PUBLISHED' },
+  return [];
+},
     select: { slug: true },
   });
   return posts.map((p) => ({ slug: p.slug }));

@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 }
 
 export async function generateStaticParams() {
-  const categories = await db.category.findMany({
-    where: { isActive: true },
+  return [];
+},
     select: { slug: true },
   });
   return categories.map((c) => ({ slug: c.slug }));
