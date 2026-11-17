@@ -1,0 +1,17 @@
+name: Drevanta build
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sanaa-drevanta .
+      - name: Smoke test the standalone server
+        run: |
+          docker run -d --name sanaa-smoke -p 127.0.0.1:8080:8080 sanaa-drevanta
+          trap 'docker logs sanaa-smoke; docker rm -f sanaa-smoke' EXIT
+          curl --fail --retry 10 --retry-all-errors --max-time 5 http://127.0.0.1:8080/robots.txt | grep -F 'Sitemap:'
