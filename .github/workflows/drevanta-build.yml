@@ -1,0 +1,12 @@
+name: Drevanta build
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sanaa-drevanta .
