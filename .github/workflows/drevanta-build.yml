@@ -35,11 +35,12 @@ jobs:
           trap cleanup EXIT
           docker network create "$network"
           docker run -d --name "$database" --network "$network" \
-            --memory 256m --memory-swap 256m --pids-limit 128 --security-opt no-new-privileges \
+            --memory 768m --memory-swap 768m --pids-limit 128 --security-opt no-new-privileges \
             -e MYSQL_DATABASE=sanaa -e MYSQL_ROOT_PASSWORD=fixture-root \
             -e MYSQL_USER=sanaa -e MYSQL_PASSWORD=fixture-app mysql:8
           ready=false
-          for attempt in {1..75}; do
+          for attempt in {1..35}; do
+            test "$(docker inspect -f '{{.State.Running}}' "$database")" = true
             if docker exec -e MYSQL_PWD=fixture-app "$database" \
               mysql --protocol=tcp -h 127.0.0.1 -usanaa -D sanaa -se 'SELECT 1' >/dev/null 2>&1; then
               ready=true
